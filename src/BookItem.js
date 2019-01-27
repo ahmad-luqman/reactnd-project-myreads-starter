@@ -2,9 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class BookItem extends Component {
-  static PropTypes = {
-    book: PropTypes.object.isRequired
+  static propTypes = {
+    book: PropTypes.object.isRequired,
+    onUpdateBookShelf: PropTypes.func.isRequired
   }
+
+  changeBookShelf = (e) => {
+    this.props.onUpdateBookShelf(e.target.value)
+  }
+
   render() {
     const { book } = this.props
     return (
@@ -21,7 +27,7 @@ class BookItem extends Component {
             }
           ></div>
           <div className="book-shelf-changer">
-            <select value={book.shelf}>
+            <select onChange={this.changeBookShelf} value={book.shelf}>
               <option value="move" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>

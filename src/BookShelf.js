@@ -3,9 +3,15 @@ import PropTypes from 'prop-types';
 import BookItem from './BookItem'
 
 class BookShelf extends Component {
-  static PropTypes = {
-    book: PropTypes.object.isRequired
+  static propTypes = {
+    book: PropTypes.object.isRequired,
+    onChangeShelf: PropTypes.func.isRequired
   }
+
+  updateBook = (book, shelf) => {
+    this.props.onChangeShelf(book, shelf)
+  }
+
   render() {
     const { books, shelfTitle } = this.props
     return (
@@ -18,6 +24,10 @@ class BookShelf extends Component {
               (<li>
                 <BookItem
                   book={book}
+                  onUpdateBookShelf={(shelf) => {
+                      this.updateBook(book, shelf)
+                    }
+                  }
                 />
               </li>)
             )}

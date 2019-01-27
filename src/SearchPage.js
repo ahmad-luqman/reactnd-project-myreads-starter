@@ -1,6 +1,40 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import * as BooksAPI from './BooksAPI'
+import BookItem from './BookItem'
 
 class SearchPage extends React.Component {
+  state = {
+    books: [],
+    query: ''
+  }
+
+  static propTypes = {
+    book: PropTypes.object.isRequired,
+    onChangeShelf: PropTypes.func.isRequired
+  }
+
+  updateBook = (book, shelf) => {
+    this.props.onChangeShelf(book, shelf)
+  }
+
+  handleChange = (event) => {
+    var query = event.target.value
+    this.setState(() => {
+      return {query: query}
+    })
+    this.searchBooks(query)
+  }
+
+  searchBooks(query) {
+    BooksAPI.search(query)
+      .then((books) => {
+        this.setState(() => ({
+          books
+        }))
+      })
+  }
+
   render() {
     return(
         <div className="search-books">
@@ -14,11 +48,29 @@ class SearchPage extends React.Component {
               However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
               you don't find a specific author or title. Every search is limited by search terms.
             */}
-            <input type="text" placeholder="Search by title or author"/>
+            <input
+              type="text"
+              placeholder="Search by title or author"
+              value={this.state.query}
+              onChange={this.handleChange}
+            />
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid"></ol>
+          <ol className="books-grid">
+            {this.state.books && this.state.books.map(
+              (book) =>
+              (<li>
+                <BookItem
+                  book={book}
+                  onUpdateBookShelf={(shelf) => {
+                      this.updateBook(book, shelf)
+                    }
+                  }
+                />
+              </li>)
+            )}
+          </ol>
         </div>
       </div>
     )

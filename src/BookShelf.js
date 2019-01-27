@@ -4,7 +4,7 @@ import BookItem from './BookItem'
 
 class BookShelf extends Component {
   static propTypes = {
-    books: PropTypes.object.isRequired,
+    books: PropTypes.array.isRequired,
     onChangeShelf: PropTypes.func.isRequired
   }
 

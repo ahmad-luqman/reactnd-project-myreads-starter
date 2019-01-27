@@ -31,6 +31,7 @@ class SearchPage extends React.Component {
         if (books && books.length > 0) {
           books = books.filter((book) => (book.imageLinks))
           books = books.filter((book) => (book.authors))
+          books.map((book)=>(book.shelf="none"))
           this.setState(() => ({
             books
           }))

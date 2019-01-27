@@ -10,7 +10,6 @@ class SearchPage extends React.Component {
   }
 
   static propTypes = {
-    book: PropTypes.object.isRequired,
     onChangeShelf: PropTypes.func.isRequired
   }
 
@@ -29,9 +28,13 @@ class SearchPage extends React.Component {
   searchBooks(query) {
     BooksAPI.search(query)
       .then((books) => {
-        this.setState(() => ({
-          books
-        }))
+        if (books && books.length > 0) {
+          books = books.filter((book) => (book.imageLinks))
+          books = books.filter((book) => (book.authors))
+          this.setState(() => ({
+            books
+          }))
+        }
       })
   }
 
@@ -60,7 +63,7 @@ class SearchPage extends React.Component {
           <ol className="books-grid">
             {this.state.books && this.state.books.map(
               (book) =>
-              (<li>
+              (<li key={book.id}>
                 <BookItem
                   book={book}
                   onUpdateBookShelf={(shelf) => {
